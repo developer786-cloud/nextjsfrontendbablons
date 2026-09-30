@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Script from "next/script";
+import brandLogo from "@/legacy/src/assets/logos/Bablons Logo.png";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
   description: "Book international tour packages from India with Bablons Travel & Entertainment. Customized holidays, visa assistance, hotels, and guided travel planning.",
   category: "travel",
   applicationName: "Bablons Travel & Entertainment",
+  icons: { icon: brandLogo.src, shortcut: brandLogo.src, apple: brandLogo.src },
   referrer: "strict-origin-when-cross-origin",
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
   alternates: { canonical: "/" },
@@ -42,7 +44,7 @@ const travelAgencySchema = {
   "@id": "https://bablonstravelent.com/#travelagency",
   name: "Bablons Travel & Entertainment",
   url: "https://bablonstravelent.com/",
-  logo: "https://bablonstravelent.com/NewFavICOn.png",
+  logo: `https://bablonstravelent.com${brandLogo.src}`,
   image: "https://bablonstravelent.com/og-image.jpg",
   description: "Bablons Travel & Entertainment provides international tour packages, customized holidays, visa assistance, flights, hotels, honeymoon packages, family vacations, group tours, and luxury travel planning from India.",
   telephone: "+91-9810212399",

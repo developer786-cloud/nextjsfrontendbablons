@@ -33,6 +33,7 @@ import DestinationGuideSections from './sections/DestinationGuideSections'
 
 import { destinationService } from '../../services/destinationService'
 import { applyPageSeo, upsertJsonLd, removeJsonLd } from '../../utils/seo'
+import { getImageUrl } from '../../utils/imageUrl'
 import { ROUTES } from '../../constants/routes'
 import { COMPANY_CONTACT } from '../../constants/companyContact'
 
