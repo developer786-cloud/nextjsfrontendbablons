@@ -28,16 +28,19 @@ export const useBlogs = (params = {}, initialData = null) => {
       const data = await requestBlogs()
       applyBlogData(data)
     } catch (err) {
-      setError(err.response?.data?.message || 'Unable to load blogs right now.')
-      setBlogs([])
-      setCategories([])
+      if (initialData?.blogs?.length && !params.category) {
+        setError('')
+      } else {
+        setError(err.response?.data?.message || 'Unable to load blogs right now.')
+        setBlogs([])
+        setCategories([])
+      }
     } finally {
       setLoadedParamsKey(paramsKey)
     }
-  }, [applyBlogData, paramsKey, requestBlogs])
+  }, [applyBlogData, initialData, params.category, paramsKey, requestBlogs])
 
   useEffect(() => {
-    if (initialData && !params.category) return
     let mounted = true
     requestBlogs()
       .then((data) => {
@@ -45,9 +48,13 @@ export const useBlogs = (params = {}, initialData = null) => {
       })
       .catch((err) => {
         if (!mounted) return
-        setError(err.response?.data?.message || 'Unable to load blogs right now.')
-        setBlogs([])
-        setCategories([])
+        if (initialData?.blogs?.length && !params.category) {
+          setError('')
+        } else {
+          setError(err.response?.data?.message || 'Unable to load blogs right now.')
+          setBlogs([])
+          setCategories([])
+        }
       })
       .finally(() => {
         if (mounted) setLoadedParamsKey(paramsKey)
@@ -58,16 +65,11 @@ export const useBlogs = (params = {}, initialData = null) => {
     }
   }, [applyBlogData, initialData, params.category, paramsKey, requestBlogs])
 
-  const useInitialData = Boolean(initialData && !params.category)
   return {
-    blogs: useInitialData ? initialData.blogs || [] : blogs,
-    categories: useInitialData
-      ? initialData.categories || [...new Set((initialData.blogs || []).map((blog) => blog.category).filter(Boolean))]
-      : categories,
-    meta: useInitialData
-      ? initialData.meta || { page: 1, total: initialData.blogs?.length || 0, totalPages: 1 }
-      : meta,
-    loading: useInitialData ? false : loading,
+    blogs,
+    categories,
+    meta,
+    loading,
     error,
     reload: loadBlogs,
   }
@@ -76,16 +78,16 @@ export const useBlogs = (params = {}, initialData = null) => {
 export const useBlog = (slug, initialBlog = null) => {
   const [blog, setBlog] = useState(initialBlog)
   const [relatedBlogs, setRelatedBlogs] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!initialBlog)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (initialBlog) return undefined
     let isMounted = true
 
     const loadBlog = async () => {
       if (!slug) return
-      setLoading(true)
+      if (initialBlog) setBlog(initialBlog)
+      else setLoading(true)
       setError('')
       try {
         const data = await blogService.getBlogBySlug(slug)
@@ -94,9 +96,11 @@ export const useBlog = (slug, initialBlog = null) => {
         setRelatedBlogs(data.relatedBlogs || [])
       } catch (err) {
         if (!isMounted) return
-        setError(err.response?.data?.message || 'Blog not found.')
-        setBlog(null)
-        setRelatedBlogs([])
+        if (!initialBlog) {
+          setError(err.response?.data?.message || 'Blog not found.')
+          setBlog(null)
+          setRelatedBlogs([])
+        }
       } finally {
         if (isMounted) setLoading(false)
       }

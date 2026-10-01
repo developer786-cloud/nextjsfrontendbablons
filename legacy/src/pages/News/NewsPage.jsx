@@ -28,7 +28,6 @@ const NewsPage = ({ initialData = null }) => {
   const [loading, setLoading] = useState(!initialData);
 
   useEffect(() => {
-    if (initialData) return undefined;
     let mounted = true;
 
     const loadAll = async () => {
@@ -41,8 +40,9 @@ const NewsPage = ({ initialData = null }) => {
       ]);
 
       if (!mounted) return;
-      const [featuredRes, latestRes, visaRes, airlineRes, countryRes] = requests.map((result) => {
-        if (result.status === "rejected") return [];
+      const [featuredRes, latestRes, visaRes, airlineRes, countryRes] = requests.map((result, index) => {
+        const initialValues = [initialData?.featured, initialData?.latest, initialData?.visaUpdates, initialData?.airlineNews, initialData?.countryNews]
+        if (result.status === "rejected") return initialValues[index] || [];
         const value = result.value;
         return Array.isArray(value) ? value : value?.data || [];
       });

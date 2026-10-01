@@ -49,11 +49,11 @@ const heroBenefits = [
 const heroBackgrounds = [heroBg1, heroBg2, heroBg3, heroBg4].map(getImageUrl)
 
 const fallbackPackages = [
-  { title: 'Santorini, Greece', destination: 'Greece', duration: '7D / 6N', image: packageImage, href: ROUTES.PACKAGES },
-  { title: 'Dubai Premium Tour', destination: 'Dubai', duration: '5D / 4N', image: packageThumbTwo, href: ROUTES.PACKAGES },
-  { title: 'Bali Escape', destination: 'Bali', duration: '6D / 5N', image: packageThumbThree, href: ROUTES.PACKAGES },
-  { title: 'Uzbekistan Silk Road', destination: 'Uzbekistan', duration: '8D / 7N', image: packageThumbOne, href: ROUTES.PACKAGES },
-  { title: 'Georgia Explorer', destination: 'Georgia', duration: '7D / 6N', image: packageThumbFour, href: ROUTES.PACKAGES },
+  { title: 'Santorini, Greece', destination: 'Greece', duration: '7D / 6N', image: getImageUrl(packageImage), href: ROUTES.PACKAGES },
+  { title: 'Dubai Premium Tour', destination: 'Dubai', duration: '5D / 4N', image: getImageUrl(packageThumbTwo), href: ROUTES.PACKAGES },
+  { title: 'Bali Escape', destination: 'Bali', duration: '6D / 5N', image: getImageUrl(packageThumbThree), href: ROUTES.PACKAGES },
+  { title: 'Uzbekistan Silk Road', destination: 'Uzbekistan', duration: '8D / 7N', image: getImageUrl(packageThumbOne), href: ROUTES.PACKAGES },
+  { title: 'Georgia Explorer', destination: 'Georgia', duration: '7D / 6N', image: getImageUrl(packageThumbFour), href: ROUTES.PACKAGES },
 ]
 
 const getPackageImage = (travelPackage) => getPackageImages(travelPackage)[0]?.url || getImageUrl(travelPackage?.image) || getImageUrl(packageImage)

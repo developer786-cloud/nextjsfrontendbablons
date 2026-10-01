@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getRecords } from "@/lib/packages";
 import LegacyPublicApp from "@/app/legacy-public-client";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 export const metadata: Metadata = { title: "Travel News | Bablons Travel", description: "Read the latest travel news and updates from Bablons Travel.", alternates: { canonical: "https://bablonstravelent.com/travel-news" } };
 
 export default async function TravelNewsPage() {

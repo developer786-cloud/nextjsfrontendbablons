@@ -36,6 +36,7 @@ export type ContentRecord = Record<string, unknown> & {
 };
 
 type ApiResponse<T> = { success?: boolean; data?: T };
+const CONTENT_REVALIDATE_SECONDS = 60;
 
 export const API_BASE_URL = (
   process.env.API_BASE_URL ||
@@ -51,9 +52,9 @@ export function apiEndpoint(path: string): string {
   return apiUrl(path);
 }
 
-export async function getPackage(slug: string): Promise<TravelPackage | null> {
+export async function getPackage(slug: string, revalidateSeconds = CONTENT_REVALIDATE_SECONDS): Promise<TravelPackage | null> {
   const response = await fetch(apiUrl(`/api/v1/packages/${encodeURIComponent(slug)}`), {
-    next: { revalidate: 3600 },
+    next: { revalidate: revalidateSeconds },
   });
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`Package request failed (${response.status})`);
@@ -66,10 +67,10 @@ export async function getPackage(slug: string): Promise<TravelPackage | null> {
   return payload as TravelPackage;
 }
 
-export async function getPackages(): Promise<TravelPackage[]> {
+export async function getPackages(revalidateSeconds = CONTENT_REVALIDATE_SECONDS): Promise<TravelPackage[]> {
   try {
     const response = await fetch(apiUrl("/api/v1/packages?limit=100"), {
-      next: { revalidate: 3600 },
+      next: { revalidate: revalidateSeconds },
     });
     if (!response.ok) {
       console.error(`Packages request failed (${response.status})`);
@@ -84,9 +85,9 @@ export async function getPackages(): Promise<TravelPackage[]> {
   }
 }
 
-export async function getRecords(path: string): Promise<ContentRecord[]> {
+export async function getRecords(path: string, revalidateSeconds = CONTENT_REVALIDATE_SECONDS): Promise<ContentRecord[]> {
   try {
-    const response = await fetch(apiUrl(path), { next: { revalidate: 3600 } });
+    const response = await fetch(apiUrl(path), { next: { revalidate: revalidateSeconds } });
     if (!response.ok) {
       console.error(`Content request failed (${response.status}): ${path}`);
       return [];
@@ -107,8 +108,8 @@ export async function getRecords(path: string): Promise<ContentRecord[]> {
   }
 }
 
-export async function getRecord(path: string): Promise<ContentRecord | null> {
-  const response = await fetch(apiUrl(path), { next: { revalidate: 3600 } });
+export async function getRecord(path: string, revalidateSeconds = CONTENT_REVALIDATE_SECONDS): Promise<ContentRecord | null> {
+  const response = await fetch(apiUrl(path), { next: { revalidate: revalidateSeconds } });
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`Content request failed (${response.status})`);
   const result = (await response.json()) as ApiResponse<unknown>;

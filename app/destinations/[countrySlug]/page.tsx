@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getRecord, recordDescription, recordImage, recordTitle } from "@/lib/packages";
 import LegacyPublicApp from "@/app/legacy-public-client";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 type Props = { params: Promise<{ countrySlug: string }> };
 const canonical = (countrySlug: string) => `https://bablonstravelent.com/destinations/${encodeURIComponent(countrySlug)}`;
 

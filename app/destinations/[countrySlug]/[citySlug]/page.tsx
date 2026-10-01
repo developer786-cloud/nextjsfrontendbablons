@@ -4,11 +4,11 @@ import { notFound } from "next/navigation";
 import LegacyPublicApp from "@/app/legacy-public-client";
 import { getRecord, recordDescription, recordImage, recordTitle } from "@/lib/packages";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 type Props = { params: Promise<{ countrySlug: string; citySlug: string }> };
 
 async function getDestination(countrySlug: string, citySlug: string) {
-  return getRecord(`/api/v1/destinations/${encodeURIComponent(citySlug)}/page?include=blogs,packages,hotels,nearbyDestinations&countrySlug=${encodeURIComponent(countrySlug)}`);
+  return getRecord(`/api/v1/destinations/${encodeURIComponent(citySlug)}/page?include=blogs,packages,hotels,nearbyDestinations&countrySlug=${encodeURIComponent(countrySlug)}&cacheTtl=60`);
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

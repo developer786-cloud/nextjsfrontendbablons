@@ -130,7 +130,7 @@ const TravelConsultationPopup = () => {
         {/* LEFT: boarding pass main stub */}
         <div className="relative flex flex-col px-4 pb-5 pt-4 sm:px-8 sm:pb-6 sm:pt-6 lg:px-9 lg:pb-8 lg:pt-7">
           <div className="flex items-center justify-between gap-3 pr-12 sm:pr-14">
-            <img src={logo} alt="Bablons Travel & Entertainment" className="h-11 w-auto object-contain sm:h-14" />
+            <img src={getImageUrl(logo)} alt="Bablons Travel & Entertainment" className="h-11 w-auto object-contain sm:h-14" />
             <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-secondary-500 px-3 py-1.5 text-[0.62rem] font-black uppercase tracking-[0.04em] text-white shadow-[0_10px_20px_rgba(217,111,58,0.25)] sm:px-3.5 sm:text-xs">
               <FaTags className="h-3 w-3" />
               20&ndash;50% Off

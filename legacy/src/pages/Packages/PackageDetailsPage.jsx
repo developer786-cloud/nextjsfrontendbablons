@@ -124,7 +124,10 @@ const PackageDetailsPage = ({ initialPackage = null }) => {
     let mounted = true
 
     Promise.all([
-      initialPackage ? Promise.resolve(initialPackage) : packageService.get(slug),
+      packageService.get(slug).catch((err) => {
+        if (!initialPackage || err.response?.status === 404) throw err
+        return initialPackage
+      }),
       packageService.related(slug).catch(() => []),
       packageService.reviews(slug).catch(() => ({ reviews: [], averageRating: 0, reviewCount: 0 })),
     ])

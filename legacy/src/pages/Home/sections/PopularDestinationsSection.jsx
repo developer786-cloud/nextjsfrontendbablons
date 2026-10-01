@@ -333,7 +333,6 @@ const PopularDestinationsSection = ({ initialDestinations = null }) => {
   const [backendCountries, setBackendCountries] = useState(() => normalizeCountries(initialDestinations || []))
 
   useEffect(() => {
-    if (initialDestinations) return undefined
     let mounted = true
 
     destinationService.groups({ active: true })
@@ -342,7 +341,7 @@ const PopularDestinationsSection = ({ initialDestinations = null }) => {
         setBackendCountries(normalizeCountries(data.countries || data.destinations || data.items || []))
       })
       .catch(() => {
-        if (mounted) setBackendCountries([])
+        if (mounted && !initialDestinations?.length) setBackendCountries([])
       })
 
     return () => {

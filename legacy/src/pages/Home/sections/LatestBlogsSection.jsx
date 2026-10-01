@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   FaArrowRight,
@@ -14,6 +15,7 @@ import {
 import { ROUTES } from '../../../constants/routes'
 import { getImageUrl } from '../../../utils/imageUrl'
 import { blogPosts as localBlogPosts } from '../../Blogs/blogData'
+import { blogService } from '../../../services/blogService'
 import fallbackOne from '../../../assets/images/Hero Banner 1.png'
 import fallbackTwo from '../../../assets/images/Hero Banner 2.png'
 import fallbackThree from '../../../assets/images/Hero Banner 3.jpg'
@@ -45,7 +47,19 @@ const getFallbackImage = (post, index) => {
 }
 
 const LatestBlogsSection = ({ initialBlogs = [] }) => {
-  const sourcePosts = initialBlogs.length ? initialBlogs : localBlogPosts
+  const [liveBlogs, setLiveBlogs] = useState(null)
+
+  useEffect(() => {
+    let mounted = true
+    blogService.getBlogs({ limit: 12 })
+      .then((data) => {
+        if (mounted) setLiveBlogs(data.blogs || data.items || [])
+      })
+      .catch(() => {})
+    return () => { mounted = false }
+  }, [])
+
+  const sourcePosts = liveBlogs === null ? (initialBlogs.length ? initialBlogs : localBlogPosts) : (liveBlogs.length ? liveBlogs : localBlogPosts)
   const blogPosts = sourcePosts.map((post, index) => ({
     ...post,
     image: getImageUrl(post.image) || getImageUrl(post.coverImage) || getImageUrl(post.featuredImage) || getImageUrl(post.thumbnail) || getFallbackImage(post, index),

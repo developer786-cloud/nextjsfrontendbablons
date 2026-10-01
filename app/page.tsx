@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getPackages, getRecords } from "@/lib/packages";
 import LegacyPublicApp from "@/app/legacy-public-client";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Bablons Travel & Entertainment | International Tour Packages from India",
   description: "Book international tour packages from India with Bablons Travel & Entertainment. Customized holidays, visa assistance, hotels, and guided travel planning.",

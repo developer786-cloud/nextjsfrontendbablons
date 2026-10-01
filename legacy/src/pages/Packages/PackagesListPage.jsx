@@ -68,11 +68,19 @@ const PackagesListPage = ({ initialPackages = [] }) => {
   }, [packages])
 
   useEffect(() => {
-    if (initialPackages.length) return
+    let mounted = true
     packageService.list({ limit: 100 })
-      .then((data) => setPackages(data.packages || data.items || []))
-      .catch((err) => setError(err.response?.data?.message || 'Failed to load packages'))
-      .finally(() => setLoading(false))
+      .then((data) => {
+        if (!mounted) return
+        setPackages(data.packages || data.items || [])
+        setError('')
+      })
+      .catch((err) => {
+        if (!mounted || initialPackages.length) return
+        setError(err.response?.data?.message || 'Failed to load packages')
+      })
+      .finally(() => mounted && setLoading(false))
+    return () => { mounted = false }
   }, [initialPackages])
 
   const filteredPackages = useMemo(() => {

@@ -241,7 +241,6 @@ const FeaturedPackagesSection = ({ initialPackages = null }) => {
   const packageRailRef = useRef(null)
 
   useEffect(() => {
-    if (initialPackages) return undefined
     let mounted = true
 
     packageService.list({ limit: 12, featured: true })
@@ -250,7 +249,7 @@ const FeaturedPackagesSection = ({ initialPackages = null }) => {
         setLivePackages(data.packages || data.items || [])
       })
       .catch(() => {
-        if (mounted) setLivePackages([])
+        if (mounted && !initialPackages?.length) setLivePackages([])
       })
 
     return () => {

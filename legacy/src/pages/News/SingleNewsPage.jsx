@@ -20,10 +20,9 @@ const SingleNewsPage = ({ initialArticle = null }) => {
   const [notFoundSlug, setNotFoundSlug] = useState('');
   const loading = Boolean(slug) && !initialArticle && loadedSlug !== slug;
   const notFound = notFoundSlug === slug;
-  const currentArticle = initialArticle || (loadedSlug === slug ? article : null);
+  const currentArticle = loadedSlug === slug ? article : initialArticle;
 
   useEffect(() => {
-    if (initialArticle) return undefined;
     if (!slug) return undefined;
     let mounted = true;
 
@@ -37,9 +36,11 @@ const SingleNewsPage = ({ initialArticle = null }) => {
       })
       .catch((err) => {
         if (!mounted) return;
-        setArticle(null);
-        setRelatedNews([]);
-        setNotFoundSlug(err?.response?.status === 404 ? slug : '');
+        if (!initialArticle) {
+          setArticle(null);
+          setRelatedNews([]);
+          setNotFoundSlug(err?.response?.status === 404 ? slug : '');
+        }
         console.error("Failed to load article:", err);
       })
       .finally(() => mounted && setLoadedSlug(slug));

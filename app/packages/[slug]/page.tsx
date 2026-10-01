@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getPackage, packageDescription, packageImage } from "@/lib/packages";
 import LegacyPublicApp from "@/app/legacy-public-client";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 type PageProps = { params: Promise<{ slug: string }> };
 

@@ -511,12 +511,13 @@ const DestinationDetailsPage = ({ initialDestination = null }) => {
   ------------------------------------------------------- */
 
   useEffect(() => {
-    if (initialDestination) return undefined
+    if (!citySlug) return undefined
     let mounted = true
 
     destinationService
       .get(citySlug, {
         countrySlug,
+        cacheTtl: 60,
       })
       .then((page) => {
         if (!mounted) return
@@ -540,8 +541,7 @@ const DestinationDetailsPage = ({ initialDestination = null }) => {
         })
       })
       .catch(() => {
-        if (!mounted) return
-
+        if (!mounted || initialDestination) return
         setBackendState({
           key: routeKey,
           result: null,

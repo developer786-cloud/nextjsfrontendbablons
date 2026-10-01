@@ -83,7 +83,6 @@ const DestinationsListPage = ({ initialDestinations = [] }) => {
   const [activeCountry, setActiveCountry] = useState('all')
 
   useEffect(() => {
-    if (initialDestinations.length) return
     let mounted = true
 
     destinationService.groups({ active: true })
@@ -94,7 +93,7 @@ const DestinationsListPage = ({ initialDestinations = [] }) => {
       })
       .catch((err) => {
         if (!mounted) return
-        setError(err.response?.data?.message || 'Live destinations are unavailable right now.')
+        if (!initialDestinations.length) setError(err.response?.data?.message || 'Live destinations are unavailable right now.')
       })
       .finally(() => {
         if (mounted) setLoading(false)
