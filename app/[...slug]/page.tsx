@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const faq = Object.values(faqPageConfigs).find((entry) => entry.path === path);
   const newsDetail = path.startsWith("/news/");
   const page = staticSeo[path] || (faq ? { title: `${faq.title} | Bablons Travel`, description: faq.description } : newsDetail ? { title: "Travel News | Bablons Travel", description: "Read the latest travel news and updates from Bablons Travel." } : { title: "Travel Gallery | Bablons Travel", description: "Explore travel photos and destinations with Bablons Travel." });
-  const canonicalPath = path === "/contact" ? "/contact-us" : path;
+  const canonicalPath = path === "/contact" ? "/contact-us" : path.startsWith("/news/") ? path.replace("/news/", "/travel-news/") : path;
   const canonical = `${SITE_URL}${canonicalPath}`;
   return {
     title: page.title,
